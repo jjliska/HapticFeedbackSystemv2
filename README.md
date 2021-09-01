@@ -18,17 +18,11 @@
 ## Images
 &ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
 <img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/20210225_181757.jpg" width="320" height="480">  
-  
 <img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/20210225_181802.jpg" width="320" height="480">  
-  
 <img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/20210225_182047.jpg" width="320" height="480">  
-  
 <img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/20210225_213826.jpg" width="320" height="480">  
-  
 <img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/20210225_214212.jpg" width="320" height="480">  
-  
 <img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/20210226_025133.jpg" width="320" height="480">  
-  
 
 ## Improvements
 &ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
