@@ -16,7 +16,7 @@
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/iuzkEGYAWhc/0.jpg)](https://www.youtube.com/watch?v=iuzkEGYAWhc)
 
 ## Images
-&ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>
+&ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
 <img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/20210225_181757.jpg" width="320" height="480">  
   
 <img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/20210225_181802.jpg" width="320" height="480">  
