@@ -1,0 +1,61 @@
+<html>
+<head>
+<script src='asyncReq.js'></script>
+<script>
+function getDataFromServer(){
+	var url = "./getValue"
+	var callback = function(data){
+		console.log(data, typeof data);
+		var args = data.split(":");
+		var time = args[0];
+		var rows = args[1].split("_");
+		var table = new Array(rows.length);
+		var size = 75;
+
+		for (var i=0;i<rows.length; i++){
+		  table[i] = rows[i].split("-");
+			for(var j=0;j<table[i].length;j++){
+				table[i][j] = parseFloat(table[i][j]);
+			}
+		}
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		if (canvas.getContext){
+			for(var i=0;i<table.length;i++){
+				var inverseJ = 0;
+				for(var j=0;j<table[i].length;j++){
+					if(j <= 0) inverseJ = table[i].length-1;
+					else inverseJ--;
+					if(table[i][inverseJ] <= 0){
+						context.fillStyle = 'rgb(0,0,255)';
+					}
+					else if(table[i][inverseJ] >= 1000.0){
+						context.fillStyle = 'rgb(0,255,0)';
+					}
+					else{
+						context.fillStyle = 'rgb(0,'
+						+ parseInt((table[i][inverseJ]/500.0)*255.0) + ','
+						+ parseInt(255.0-((table[i][inverseJ]/500.0)*255.0)) + ')';
+					}
+	    		context.fillRect((i*size),(j*size),size,size);
+				}
+			}
+		}
+
+		console.table(table);
+		var output = "<p>" + new Date(parseInt(time)).toString() + "</p>";
+
+		document.getElementById("time").innerHTML = output;
+	}
+	loadFile(url, callback);
+}
+</script>
+</head>
+
+<body style='text-align:center; font-family:Helvetica' onload='setInterval("getDataFromServer()", 250)'>
+	<h1> Touch Sensor Data </h1>
+	<div id='time'></div>
+	<canvas id='canvas' height='450px' width= 675px'></canvas>
+</body>
+</html>
