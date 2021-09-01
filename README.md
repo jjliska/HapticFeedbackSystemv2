@@ -33,7 +33,12 @@ This step could then be taken one step further and the two pieces integrated int
 
 
 ## Explanations
-&ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>
+&ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
+### Construction  
+&ensp;The construction of the piece is made of a PLA backplate, which then has a copper tape and clear acrylic tape placed inbetween these pieces to attempt to hold down the velostat placed ontop of it. This is intended to stop the copper and velostat from moving when pressure is applied to it. The top plate is then made of a TPU material that allows for flexibility and pressure to more easily go directly to the copper bands that are being pressed against.
+
+### Data Gathering
+&ensp;Data is gotten from polling the connections between the two bands of copper. One band is running vertically while the other is perpendicular to this, aka horizontal. When pressure is applied to the material the velostat inbetween the two bands is compressed allowing electricity to more easily flow through it and reducing the amount of resistance the material applies.
 
 ## References
 &ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>
