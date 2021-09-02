@@ -73,7 +73,7 @@ void readMatrix(bool startup){
 </details>
 
 ### Data Storage
-&ensp;The data from the matrix to a web server that stores the data into a mongoDB database. This information is displayed on the website that is also used to collect data so that the user can view the live output of the matrix they are interacting with.
+&ensp;The data is stored initially in a 2d list object on the ESP-32. This is then passed to a stringify function toURL() which formats the list into a string that can be passed to the web server and then later stored in a mongoDB database. 
 
 <details><summary>C/C++ Script</summary>
 <p>
@@ -152,6 +152,131 @@ app.get("/sendData", function (req, res) {
 ```
 
 &ensp;[From server.js](https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/server/server.js)
+
+</p>
+</details>
+
+### Data Display
+&ensp;The data is displayed in many various ways. On the ESP-32 through the serial communication line the data is output as the list formatted in a more visually pleasing way. This can easily be turned off so that the ESP-32 can run more efficiently, however it was done during the initial stage of prototyping and was never turned off.
+
+<details><summary>C/C++ Script</summary>
+<p>
+
+```c
+void printMatrix(bool startup){
+  Serial.print("Url: ");Serial.println(toUrl());
+  Serial.println("--------------------------------------------------------");
+  for(int i=0;i<9;i++){
+    for(int j=0;j<6;j++){
+      Serial.print("[ ");
+      if(!startup) Serial.print(pressureMatrix[i][j]);
+      else Serial.print(calibrationMatrix[i][j]);
+      Serial.print(" ]");
+    }
+    Serial.println();
+  }
+  Serial.println("--------------------------------------------------------");
+}
+```  
+  
+&ensp;[From HapticFeedback.ino](https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/HapticFeedback/HapticFeedback.ino)
+
+</p>
+</details>
+
+<details><summary>JavaScript</summary>
+<p>
+  
+&ensp;The data is also visually displayed to client via a neat little website that allows the user to view the pressure on the device at a low refresh rate, roughly ten times a seocnd, for a frame rate of 10. This can easily be increased but would require data to roll over or not be stored at all and just passed to the server and held until it was retrieved by the other device.
+	
+```JavaScript
+function getDataFromServer(){
+	var url = "./getValue"
+	var callback = function(data){
+		console.log(data, typeof data);
+		var args = data.split(":");
+		var time = args[0];
+		var rows = args[1].split("_");
+		var table = new Array(rows.length);
+		var size = 75;
+
+		for (var i=0;i<rows.length; i++){
+		  table[i] = rows[i].split("-");
+			for(var j=0;j<table[i].length;j++){
+				table[i][j] = parseFloat(table[i][j]);
+			}
+		}
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		if (canvas.getContext){
+			for(var i=0;i<table.length;i++){
+				var inverseJ = 0;
+				for(var j=0;j<table[i].length;j++){
+					if(j <= 0) inverseJ = table[i].length-1;
+					else inverseJ--;
+					if(table[i][inverseJ] <= 0){
+						context.fillStyle = 'rgb(0,0,255)';
+					}
+					else if(table[i][inverseJ] >= 1000.0){
+						context.fillStyle = 'rgb(0,255,0)';
+					}
+					else{
+						context.fillStyle = 'rgb(0,'
+						+ parseInt((table[i][inverseJ]/500.0)*255.0) + ','
+						+ parseInt(255.0-((table[i][inverseJ]/500.0)*255.0)) + ')';
+					}
+			context.fillRect((i*size),(j*size),size,size);
+				}
+			}
+		}
+
+		console.table(table);
+		var output = "<p>" + new Date(parseInt(time)).toString() + "</p>";
+
+		document.getElementById("time").innerHTML = output;
+	}
+	loadFile(url, callback);
+}
+```
+
+&ensp;[From index.html](https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/server/public/index.html)
+
+</p>
+</details>
+
+&ensp;Lastly, the data can be interpolated by other informatics programs such as a simple python program I wrote to read the entirety of the database and display it as a function of average pressure on the system over time. This could be done for individual spots to determine where the user is placing the most pressure on and other statistical data needed from the system.
+
+<details><summary>Python</summary>
+<p>
+  	
+```python
+for data in obj:
+    averagePressure = 0
+    dataString = data.get("x")
+    if data.get("x") != "[object Undefined]":
+        count+=1
+        tempArray = dataString.split("_")
+        for i in range(0,len(tempArray)):
+            tempArray[i] = tempArray[i].replace(" ","-").split("-")
+            for j in range(0, len(tempArray[i])):
+                try:
+                    averagePressure+=float(tempArray[i][j])
+                except:
+                    break
+        averagePressure=averagePressure/float(len(tempArray)*len(tempArray[0]))
+        avPressureList.append(averagePressure)
+        totPressure+=averagePressure
+
+totPressure=totPressure/float(count)
+print("Total number of valid objects: %i" %count)
+print("Average pressure across the grid: %f" %totPressure)
+
+#Showing the graph
+plt.plot(range(0,count),avPressureList)
+```
+
+&ensp;[From JsonPY.py](https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/JsonPY.py)
 
 </p>
 </details>
