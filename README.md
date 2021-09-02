@@ -35,7 +35,7 @@ This step could then be taken one step further and the two pieces integrated int
 ## Explanations
 &ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
 ### Construction  
-&ensp;The construction of the piece is made of a PLA backplate, which then has a copper tape and clear acrylic tape placed in between these pieces to attempt to hold down the velostat placed ontop of it. This is intended to stop the copper and velostat from moving when pressure is applied to it. The top plate is then made of a TPU material that allows for flexibility and pressure to more easily go directly to the copper bands that are being pressed against.
+&ensp;The construction of the piece is made of a PLA backplate, which then has a copper tape and clear acrylic tape placed in between these pieces to attempt to hold down the velostat placed on top of it. This is intended to stop the copper and velostat from moving when pressure is applied to it. The top plate is then made of a TPU material that allows for flexibility and pressure to more easily go directly to the copper bands that are being pressed against.
 
 ### Data Gathering
 &ensp;Data is obtained from polling the connections between the two bands of copper. One band is running vertically while the other is perpendicular to this, aka horizontal. When pressure is applied to the material the velostat in between the two bands is compressed allowing electricity to more easily flow through it and reducing the amount of resistance the material applies.
@@ -72,6 +72,84 @@ void readMatrix(bool startup){
 </p>
 </details>
 
+### Data Display
+&ensp;The data from the matrix to a web server that stores the data into a mongoDB database. This information is displayed on the website that is also used to collect data so that the user can view the live output of the matrix they are interacting with.
+
+<details><summary>C/C++ Script</summary>
+<p>
+
+```c
+/*  void httpGETRequest()
+ *    sets up communication with the AWS server
+ */
+String httpGETRequest(const char* serverName) {
+  HTTPClient http;
+    
+  // Your IP address with path or Domain name with URL path 
+  http.begin(serverName);
+  
+  // Send HTTP POST request
+  int httpResponseCode = http.GET();
+  
+  String payload = "{}"; 
+  
+  if (httpResponseCode>0) {
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
+    payload = http.getString();
+  }
+  else {
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
+  }
+  // Free resources
+  http.end();
+
+  return payload;
+}
+
+/*  void toUrl()
+ *    takes the array data taken from the pressure sensor and parses it into a readable format for the AWS website to handle
+ */
+String toUrl(){
+  String url = serverName;
+  for(int i=0;i<9;i++){
+    for(int j=0;j<6;j++){
+      if(j<5) url = url + pressureMatrix[i][j] + " ";
+      else url = url + pressureMatrix[i][j];
+    }
+    if(i<8) url = url + ",";
+  }
+  return url;
+}
+```  
+  
+&ensp;[From HapticFeedback.ino](https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/HapticFeedback/HapticFeedback.ino)
+
+</p>
+</details>
+
+<details><summary>JavaScript</summary>
+<p>
+  
+```JavaScript
+app.get("/sendData", function (req, res) {
+  VALUEx = req.query.x;
+  VALUEtime = new Date().getTime();
+	var dataObj = {
+		x: VALUEx,
+		time: VALUEtime
+	}
+	db.collection("data").insert(dataObj, function(err,result){
+		console.log("added data: " + JSON.stringify(dataObj));
+	});
+  res.send(VALUEtime.toString());
+});
+
+&ensp;[From server.js](https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/server/server.js)
+
+</p>
+</details>
 
 ## References
 &ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
