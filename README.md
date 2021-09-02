@@ -72,7 +72,7 @@ void readMatrix(bool startup){
 </p>
 </details>
 
-### Data Display
+### Data Storage
 &ensp;The data from the matrix to a web server that stores the data into a mongoDB database. This information is displayed on the website that is also used to collect data so that the user can view the live output of the matrix they are interacting with.
 
 <details><summary>C/C++ Script</summary>
@@ -133,6 +133,10 @@ String toUrl(){
 <p>
   
 ```JavaScript
+var db = MS.db("mongodb://localhost:27017/data");
+
+...
+
 app.get("/sendData", function (req, res) {
   VALUEx = req.query.x;
   VALUEtime = new Date().getTime();
@@ -145,6 +149,7 @@ app.get("/sendData", function (req, res) {
 	});
   res.send(VALUEtime.toString());
 });
+```
 
 &ensp;[From server.js](https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/server/server.js)
 
