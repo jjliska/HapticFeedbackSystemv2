@@ -26,19 +26,51 @@
 
 ## Improvements
 &ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
-&ensp;Unlike the previous itteration that had actually had a haptic feedback system installed directly into the object. this itteration has no literal feedback system. Instead it directly stores data as a json on a live mongodb server. This data is stored and then sent to a live webserver hosting a simple html script that shows the user a rough pixel approximation of where their hand is and the amount of pressure being displayed through color and the console.
-&ensp;This could easily be made into two products one of which sends and the other of which recieves this would then make the product tangible in the interaction of the two parts.
-This step could then be taken one step further and the two pieces integrated into eachother and then multiplied into two independent systems that communicate with the webserver and grab the others data allowing the two interfaces to interact with eachother.  
-&ensp;The design for this concept would use some sort of piezo-electric material, variable solenoid, or electrically expanding fluid to stimulate the sensation of pressure given a specific voltage. The concept idea that was most fesable was to use some sort of air pressure in a small version. This would allow for the price of the prototype to stay low while still allowing for the dexterity of pressure sensitivity in a small space, as only the tube needs to run inbetween the piece and the electrical grid. This would be printed in "baloons" of some sort of TPU or silicon to allow for expansion as well as a semi rigid grid that the "baloons" sit in.  
+&ensp;Unlike the previous iteration that had actually had a haptic feedback system installed directly into the object. this iteration has no literal feedback system. Instead it directly stores data as a json on a live mongodb server. This data is stored and then sent to a live webservers hosting a simple html script that shows the user a rough pixel approximation of where their hand is and the amount of pressure being displayed through color and the console.
+&ensp;This could easily be made into two products one of which sends and the other of which receives this would then make the product tangible in the interaction of the two parts.
+This step could then be taken one step further and the two pieces integrated into each other and then multiplied into two independent systems that communicate with the webserver and grab the others data allowing the two interfaces to interact with eachother.  
+&ensp;The design for this concept would use some sort of piezo-electric material, variable solenoid, or electrically expanding fluid to stimulate the sensation of pressure given a specific voltage. The concept idea that was most feasible was to use some sort of air pressure in a small version. This would allow for the price of the prototype to stay low while still allowing for the dexterity of pressure sensitivity in a small space, as only the tube needs to run in between the piece and the electrical grid. This would be printed in "balloons" of some sort of TPU or silicone to allow for expansion as well as a semi rigid grid that the "balloons" sit in.  
 
 
 ## Explanations
 &ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
 ### Construction  
-&ensp;The construction of the piece is made of a PLA backplate, which then has a copper tape and clear acrylic tape placed inbetween these pieces to attempt to hold down the velostat placed ontop of it. This is intended to stop the copper and velostat from moving when pressure is applied to it. The top plate is then made of a TPU material that allows for flexibility and pressure to more easily go directly to the copper bands that are being pressed against.
+&ensp;The construction of the piece is made of a PLA backplate, which then has a copper tape and clear acrylic tape placed in between these pieces to attempt to hold down the velostat placed ontop of it. This is intended to stop the copper and velostat from moving when pressure is applied to it. The top plate is then made of a TPU material that allows for flexibility and pressure to more easily go directly to the copper bands that are being pressed against.
 
 ### Data Gathering
-&ensp;Data is gotten from polling the connections between the two bands of copper. One band is running vertically while the other is perpendicular to this, aka horizontal. When pressure is applied to the material the velostat inbetween the two bands is compressed allowing electricity to more easily flow through it and reducing the amount of resistance the material applies.
+&ensp;Data is obtained from polling the connections between the two bands of copper. One band is running vertically while the other is perpendicular to this, aka horizontal. When pressure is applied to the material the velostat in between the two bands is compressed allowing electricity to more easily flow through it and reducing the amount of resistance the material applies.
+
+<details><summary>C++ Script</summary>
+<p>
+
+int preI = 0, preJ = 0;
+
+void readMatrix(bool startup){
+  int analogIn;
+  for(int i=0;i<9;i++){
+    digitalWrite(rows[preI], LOW);
+    digitalWrite(rows[i], HIGH);
+    preI = i;
+    for(int j=0;j<6;j++){
+      digitalWrite(cols[preJ], LOW);
+      digitalWrite(cols[j], HIGH);
+      preJ = j;
+      analogIn = analogRead(rows[i]);
+      if(!startup){
+        if((analogIn - calibrationMatrix[i][j])<=0) pressureMatrix[i][j] = 0.0;
+        else pressureMatrix[i][j] = float(analogIn);
+      }
+      else calibrationMatrix[i][j] = calibrationMatrix[i][j] + (float(analogIn)/sampleNum);
+    }
+  }
+}
+                                                   
+&ensp;[From HapticFeedback.ino](https://https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/HapticFeedback/HapticFeedback.ino)
+
+</p>
+</details>
+
 
 ## References
 &ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>
+<a href="https://www.nanomotion.com/nanomotion-technology/piezoelectric-effect/">Piezo-Electric effect and the nanomotion produced in a piezo-electric system</a>
