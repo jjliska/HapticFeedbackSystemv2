@@ -40,9 +40,10 @@ This step could then be taken one step further and the two pieces integrated int
 ### Data Gathering
 &ensp;Data is obtained from polling the connections between the two bands of copper. One band is running vertically while the other is perpendicular to this, aka horizontal. When pressure is applied to the material the velostat in between the two bands is compressed allowing electricity to more easily flow through it and reducing the amount of resistance the material applies.
 
-<details><summary>C++ Script</summary>
+<details><summary>C/C++ Script</summary>
 <p>
 
+```c
 int preI = 0, preJ = 0;
 
 void readMatrix(bool startup){
@@ -64,6 +65,7 @@ void readMatrix(bool startup){
     }
   }
 }
+```
                                                    
 &ensp;[From HapticFeedback.ino](https://https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Code/HapticFeedback/HapticFeedback.ino)
 
@@ -72,5 +74,5 @@ void readMatrix(bool startup){
 
 
 ## References
-&ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>
+&ensp;<sup>[Back to Top](#Haptic-Feedback-System-v2)</sup>  
 <a href="https://www.nanomotion.com/nanomotion-technology/piezoelectric-effect/">Piezo-Electric effect and the nanomotion produced in a piezo-electric system</a>
