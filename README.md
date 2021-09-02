@@ -249,7 +249,7 @@ function getDataFromServer(){
 
 &ensp;Lastly, the data can be interpolated by other informatics programs such as a simple python program I wrote to read the entirety of the database and display it as a function of average pressure on the system over time. This could be done for individual spots to determine where the user is placing the most pressure on and other statistical data needed from the system.
 
-<img src="hhttps://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/Parsed_Database.png" width="480" height="320">
+<img src="https://github.com/jjliska/HapticFeedbackSystemv2/blob/main/Media/Parsed_Database.png" width="480" height="320">
 
 <details><summary>Python</summary>
 <p>
